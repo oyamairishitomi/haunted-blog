@@ -30,8 +30,6 @@ class BlogsController < ApplicationController
   end
 
   def update
-    return head :bad_request if !current_user.premium? && params[:blog].key?(:random_eyecatch)
-
     if @blog.update(blog_params)
       redirect_to blog_url(@blog), notice: 'Blog was successfully updated.'
     else
@@ -52,6 +50,8 @@ class BlogsController < ApplicationController
   end
 
   def blog_params
-    params.expect(blog: %i[title content secret random_eyecatch])
+    allowed_params = %i[title content secret]
+    allowed_params << :random_eyecatch if current_user.premium?
+    params.expect(blog: allowed_params)
   end
 end
