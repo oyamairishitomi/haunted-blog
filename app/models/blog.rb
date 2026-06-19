@@ -12,7 +12,7 @@ class Blog < ApplicationRecord
   scope :visible_to, ->(user) { where(secret: false).or(where(user_id: user&.id)) }
 
   scope :search, lambda { |term|
-    where('title LIKE ? OR content LIKE ?', "%#{term}%", "%#{term}%")
+    where('title LIKE ? OR content LIKE ?', "%#{sanitize_sql_like(term)}%", "%#{sanitize_sql_like(term)}%")
   }
 
   scope :default_order, -> { order(id: :desc) }
