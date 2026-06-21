@@ -2,6 +2,6 @@
 
 module BlogsHelper
   def format_content(blog)
-    simple_format(blog.content)
+    simple_format(html_escape(blog.content))
   end
 end
