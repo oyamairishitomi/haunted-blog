@@ -12,8 +12,8 @@ class Blog < ApplicationRecord
   scope :visible_to, ->(user) { published.or(where(user: user)) }
 
   scope :search, lambda { |term|
-    next all if term.blank?
-    where('title LIKE ? OR content LIKE ?', "%#{sanitize_sql_like(term)}%", "%#{sanitize_sql_like(term)}%")
+    pattern = "%#{sanitize_sql_like(term.to_s)}%"
+    where('title LIKE ? OR content LIKE ?', pattern, pattern)
   }
 
   scope :default_order, -> { order(id: :desc) }
